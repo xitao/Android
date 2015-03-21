@@ -65,7 +65,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
             String cityCode = sharedPreferences.getString("main_city_code", "101010100");
             Log.d("myWeather", cityCode);
-            if (NetUtil.getNetworkState(this)!= NetUtil.NETWORN_NONE){
+            if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE){
                 Log.d("myWeather", "网络良好");
                 queryWeatherCode(cityCode);
             }else
