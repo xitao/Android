@@ -4,21 +4,37 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 
-public class MainActivity2Activity extends ActionBarActivity {
+public class SelectCity extends ActionBarActivity implements View.OnClickListener {
+    private ImageView mBackBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_activity2);
+        setContentView(R.layout.select_city);
+        mBackBtn = (ImageView)findViewById(R.id.title_back);
+        mBackBtn.setOnClickListener(this);
+    }
+    @Override
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.title_back:
+                finish();
+                break;
+            default:
+                break;
+        }
+
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main_activity2, menu);
+        getMenuInflater().inflate(R.menu.menu_select_city, menu);
         return true;
     }
 
@@ -36,4 +52,5 @@ public class MainActivity2Activity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

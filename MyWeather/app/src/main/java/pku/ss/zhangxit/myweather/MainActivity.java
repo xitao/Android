@@ -1,6 +1,7 @@
 package pku.ss.zhangxit.myweather;
 
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
@@ -25,10 +26,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import android.os.Handler;
+
+import java.lang.reflect.Field;
 import java.util.zip.GZIPInputStream;
 
 import pku.ss.zhangxit.bean.TodayWeather;
 import pku.ss.zhangxit.util.NetUtil;
+import pku.ss.zhangxit.util.PinYin;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
@@ -99,7 +103,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             }
 
         }else if (view.getId() == R.id.title_city_manager){
-            Intent intent=new Intent(MainActivity.this,MainActivity2Activity.class);
+            Intent intent=new Intent(MainActivity.this,SelectCity.class);
             startActivity(intent);
         }
     }
@@ -268,6 +272,46 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         climateTv.setText(todayWeather.getType());
         windTv.setText("风力:"+todayWeather.getFengli());
         Toast.makeText(MainActivity.this,"更新成功!",Toast.LENGTH_SHORT).show();
+
+
+        int pmValue = Integer.parseInt(todayWeather.getPm25().trim());
+
+        String pmImgStr = "0_50";
+                if(pmValue>50 && pmValue<201){
+                    int startV = (pmValue - 1)/50*50+1;
+                    int endV = ((pmValue - 1)/50+1)*50;
+                    pmImgStr = Integer.toString(startV)+"_" + endV;
+                }
+                else if (pmValue>=201 && pmValue<301){
+                    pmImgStr = "201_300";
+                }
+                else if (pmValue>=301){
+                    pmImgStr = "greater_300";
+                }
+                String typeImg = "biz_plugin_weather_" + PinYin.converterToSpell(todayWeather.getType());
+                Class aClass = R.drawable.class;
+                int typeld = -1;
+        int pmImgld = -1;
+        try{
+            Field field = aClass.getField(typeImg);
+            Object value = field.get(new Integer(0));
+            typeld = (int)value;
+            Field pmField = aClass.getField("biz_plugin_weather_"+pmImgStr);
+            Object pmImgO = pmField.get(new Integer(0));
+            pmImgld = (int)pmImgO;
+        }catch (Exception e){
+            //e.printStackTrace();
+            if (-1 == typeld)
+                typeld = R.drawable.biz_plugin_weather_qing;
+            if (-1 == pmImgld)
+                pmImgld = R.drawable.biz_plugin_weather_0_50;
+        }finally {
+            Drawable drawable = getResources().getDrawable(typeld);
+            weatherImg.setImageDrawable(drawable);
+            drawable = getResources().getDrawable(pmImgld);
+            pmImg.setImageDrawable(drawable);
+            Toast.makeText(MainActivity.this,"更新成功",Toast.LENGTH_SHORT).show();
+        }
     }
 
 

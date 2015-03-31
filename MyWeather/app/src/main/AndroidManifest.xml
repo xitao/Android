@@ -20,8 +20,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity2Activity"
-            android:label="@string/title_activity_main_activity2" >
+            android:name=".SelectCity"
+            android:label="@string/title_activity_select_city" >
         </activity>
     </application>
 
